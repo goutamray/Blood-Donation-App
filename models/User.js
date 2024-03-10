@@ -54,6 +54,11 @@ const userSchema = mongoose.Schema({
     trim : true,
     default : null,
    },
+   role : {
+    type : String, 
+    default : "patient",
+    enum : ["patient", "doner", "admin"], 
+   },
   accessToken : {
     type : String,
     default : null,

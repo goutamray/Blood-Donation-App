@@ -2,9 +2,15 @@
 import bloodLogo from "../../assets/frontend/img/blood.png"
 import { Link } from "react-router-dom"
 import useForm from "../../hooks/useForm";
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { registerPatient } from "../../features/auth/authApiSlice";
+import { authSelect, setMessageEmpty } from "../../features/auth/authSlice";
+import { useEffect } from "react";
+import createToast from "../../utilis/toastify";
 
 const Register = () => {
+   const { loading, error, message } = useSelector(authSelect);
+
    const dispatch = useDispatch(); 
    
   const { input , handleInputChange, resetForm  } = useForm({
@@ -16,11 +22,25 @@ const Register = () => {
 
   // handlePatientCreate 
   const handlePatientCreate = () => {
+    dispatch(registerPatient(input)); 
 
-    dispatch(); 
-   
   }
+  
+   useEffect(() => {
+     if (message) {
+      createToast(message, "success"); 
+      dispatch(setMessageEmpty()); 
+      resetForm();
 
+     } 
+
+     if (error) {
+      createToast(error); 
+      dispatch(setMessageEmpty());  
+     }
+   }, [error, message, dispatch, resetForm]) 
+
+ 
   return (
     <>
   {/* Page Content */}
@@ -41,12 +61,12 @@ const Register = () => {
               <div className="col-md-12 col-lg-6 login-right">
                 <div className="login-header">
                   <h3>
-                    Patient Register{" "}
+                    Patient Register
                     <Link to="/doner-register">Are you a Donor?</Link>
                   </h3>
                 </div>
+
                 {/* Register Form */}
-                <form >
                   <div className="mb-3 form-focus">
                     <input type="text" className="form-control floating" name="name" value={input.name} onChange={handleInputChange} />
                     <label className="focus-label">Name</label>
@@ -86,8 +106,8 @@ const Register = () => {
                       </a>
                     </div>
                   </div>
-                </form>
                 {/* /Register Form */}
+
               </div>
             </div>
           </div>
