@@ -18,12 +18,17 @@ import { sendSMS } from "../utilis/sendSMS.js";
  */
 export const registerUser = asyncHandler(async(req, res) => {
   // get form data 
-  const { name, auth, password } = req.body;
+  const { name, auth, password, role, cPass } = req.body;
 
   // validation 
   if (!name || !auth || !password) {
-    res.status(400).json({ message : "All fileds are required"});
+   return res.status(400).json({ message : "All fileds are required"});
   };
+
+  // confirm password
+  if (password !== cPass) {
+    return res.status(400).json({ message : "Password Not Match"});
+  }; 
 
   // create otp 
   const otp = createOTP();
@@ -40,7 +45,7 @@ export const registerUser = asyncHandler(async(req, res) => {
     const emailCheck = await User.findOne({ email : auth });
 
     if (emailCheck) {
-       res.status(400).json({ message : "Email Already Exisits"});
+      return res.status(400).json({ message : "Email Already Exisits"});
       };  
    }else if(isMobile(auth)){
     authPhone = auth;
@@ -49,10 +54,10 @@ export const registerUser = asyncHandler(async(req, res) => {
    const phoneCheck = await User.findOne({ phone : auth });
 
     if (phoneCheck) {
-        res.status(400).json({ message : "Phone Number Already Exisits"});
+       return res.status(400).json({ message : "Phone Number Already Exisits"});
      }; 
    }else{
-    res.status(400).json({ message : "You must have Phone number or Email"});
+    return  res.status(400).json({ message : "You must have Phone number or Email"});
    }  
 
 
@@ -67,6 +72,7 @@ export const registerUser = asyncHandler(async(req, res) => {
   phone : authPhone,
   password : hassPass,
   accessToken : otp,
+  role : role
  }); 
 
  if (user) {
@@ -113,7 +119,7 @@ export const accountActivateByOTP = asyncHandler(async(req, res) => {
    const verifyToken = jwt.verify(activationToken, process.env.ACCOUNT_ACTIVATION_SECRET); 
 
    if (!verifyToken) {
-    res.status(400).json({ message : "Invalid Token " });
+    return res.status(400).json({ message : "Invalid Token " });
    }
 
  // activate user 

@@ -9,22 +9,23 @@ import { useEffect } from "react";
 import createToast from "../../utilis/toastify";
 
 const Register = () => {
-   const { loading, error, message } = useSelector(authSelect);
+   const { loader, error, message } = useSelector(authSelect);
 
    const dispatch = useDispatch(); 
    
   const { input , handleInputChange, resetForm  } = useForm({
     name : "",
     auth : "",
-    password : ""
+    password : "",
+    cPass : "",
+    role : "patient",
   }); 
 
 
   // handlePatientCreate 
   const handlePatientCreate = () => {
     dispatch(registerPatient(input)); 
-
-  }
+  }; 
   
    useEffect(() => {
      if (message) {
@@ -38,7 +39,7 @@ const Register = () => {
       createToast(error); 
       dispatch(setMessageEmpty());  
      }
-   }, [error, message, dispatch, resetForm]) 
+   }, [error, message, dispatch, resetForm]); 
 
  
   return (
@@ -79,6 +80,10 @@ const Register = () => {
                     <input type="password" className="form-control floating" name="password" value={input.password} onChange={handleInputChange} />
                     <label className="focus-label">Create Password</label>
                   </div>
+                  <div className="mb-3 form-focus">
+                    <input type="password" className="form-control floating" name="cPass" value={input.cPass} onChange={handleInputChange} />
+                    <label className="focus-label">Confirm Password</label>
+                  </div>
                   <div className="text-end">
                     <Link className="forgot-link" to="/login">
                       Already have an account?
@@ -88,7 +93,8 @@ const Register = () => {
                     className="btn btn-primary w-100 btn-lg login-btn"
                    onClick={handlePatientCreate}
                   >
-                    Signup
+                    { loader ? "Creating...." : " Signup"}
+                   
                   </button>
                   <div className="login-or">
                     <span className="or-line" />

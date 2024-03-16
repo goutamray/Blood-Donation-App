@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { registerPatient } from "./authApiSlice";
+import { registerDonor, registerPatient } from "./authApiSlice";
 
 
 // create auth slice 
@@ -27,6 +27,17 @@ const authSlice = createSlice({
       state.error = action.error.message 
     })
     .addCase(registerPatient.fulfilled, (state, action) =>{
+      state.loader = false,
+      state.message = action.payload.message 
+    }) 
+    .addCase(registerDonor.pending, (state, action) =>{
+      state.loader = true 
+    })
+    .addCase(registerDonor.rejected, (state, action) =>{
+      state.loader = false,
+      state.error = action.error.message 
+    })
+    .addCase(registerDonor.fulfilled, (state, action) =>{
       state.loader = false,
       state.message = action.payload.message 
     }) 

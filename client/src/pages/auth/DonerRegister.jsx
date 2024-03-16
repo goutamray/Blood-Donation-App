@@ -2,16 +2,45 @@
 import bloodLogo from "../../assets/frontend/img/blood.png"
 import { Link } from "react-router-dom"
 import useForm from "../../hooks/useForm"
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import createToast from "../../utilis/toastify";
+import { authSelect, setMessageEmpty } from "../../features/auth/authSlice";
+import { registerDonor } from "../../features/auth/authApiSlice";
+
+
 
 const DonerRegister = () => {
-   
-  const { input , handleInputChange, resetForm } = useForm({
-    name : "",
-    auth : "",
-    password : ""
-  }); 
+  const { loader, error, message } = useSelector(authSelect);
 
+  const dispatch = useDispatch(); 
+  
+ const { input , handleInputChange, resetForm  } = useForm({
+   name : "",
+   auth : "",
+   password : "",
+   cPass : "",
+   role : "donor",
+ });   
+
+  // donor register
+  const HandleDonorRegister = () => {
+    dispatch(registerDonor(input)); 
+  }; 
  
+  useEffect(() => {
+    if (message) {
+     createToast(message, "success"); 
+     dispatch(setMessageEmpty()); 
+     resetForm();
+
+    } 
+
+    if (error) {
+     createToast(error); 
+     dispatch(setMessageEmpty());  
+    }
+  }, [error, message, dispatch, resetForm]); 
 
   return (
     <>
@@ -33,23 +62,27 @@ const DonerRegister = () => {
               <div className="col-md-12 col-lg-6 login-right">
                 <div className="login-header">
                   <h3>
-                    Donor Register{" "}
+                    Donor Register
                     <Link to="/register"> Are you a Patient?</Link>
                   </h3>
                 </div>
+
                 {/* Register Form */}
-                <form >
                   <div className="mb-3 form-focus">
                     <input type="text" className="form-control floating" name="name" value={input.name} onChange={handleInputChange} />
                     <label className="focus-label">Name</label>
                   </div>
                   <div className="mb-3 form-focus">
                     <input type="text" className="form-control floating" name="auth" value={input.auth} onChange={handleInputChange}  />
-                    <label className="focus-label">Mobile Number/Email Address </label>
+                    <label className="focus-label">Mobile Number / Email Address </label>
                   </div>
                   <div className="mb-3 form-focus">
                     <input type="password" className="form-control floating" name="password" value={input.password} onChange={handleInputChange} />
                     <label className="focus-label">Create Password</label>
+                  </div>
+                  <div className="mb-3 form-focus">
+                    <input type="password" className="form-control floating" name="cPass" value={input.cPass} onChange={handleInputChange} />
+                    <label className="focus-label"> Confirm Password</label>
                   </div>
                   <div className="text-end">
                     <Link className="forgot-link" to="/login">
@@ -58,9 +91,9 @@ const DonerRegister = () => {
                   </div>
                   <button
                     className="btn btn-primary w-100 btn-lg login-btn"
-                    type="submit"
+                    onClick={HandleDonorRegister}
                   >
-                    Signup
+                   { loader ?"Creating...." : " Signup"} 
                   </button>
                   <div className="login-or">
                     <span className="or-line" />
@@ -78,7 +111,7 @@ const DonerRegister = () => {
                       </a>
                     </div>
                   </div>
-                </form>
+             
                 {/* /Register Form */}
               </div>
             </div>
@@ -93,7 +126,7 @@ const DonerRegister = () => {
   )
 }
 
-export default DonerRegister
+export default DonerRegister; 
 
 
 
