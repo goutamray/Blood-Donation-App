@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { registerDonor, registerPatient } from "./authApiSlice";
+import { loginUser, logoutUser, registerDonor, registerPatient } from "./authApiSlice";
 
 
 // create auth slice 
 const authSlice = createSlice({
   name : "auth",
   initialState : {
-    user : null,
+    user : localStorage.getItem("loginUser") ? JSON.parse(localStorage.getItem("loginUser")) : null,
     message : null,
     error : null,
     loader : false, 
@@ -19,7 +19,8 @@ const authSlice = createSlice({
   },
   extraReducers : (builder) => {
     builder
-    .addCase(registerPatient.pending, (state, action) =>{
+    // register patient 
+    .addCase(registerPatient.pending, (state ) =>{
       state.loader = true 
     })
     .addCase(registerPatient.rejected, (state, action) =>{
@@ -30,7 +31,8 @@ const authSlice = createSlice({
       state.loader = false,
       state.message = action.payload.message 
     }) 
-    .addCase(registerDonor.pending, (state, action) =>{
+    // regiser doner 
+    .addCase(registerDonor.pending, (state ) =>{
       state.loader = true 
     })
     .addCase(registerDonor.rejected, (state, action) =>{
@@ -40,6 +42,34 @@ const authSlice = createSlice({
     .addCase(registerDonor.fulfilled, (state, action) =>{
       state.loader = false,
       state.message = action.payload.message 
+    }) 
+    // login user 
+    .addCase(loginUser.pending, (state ) =>{
+      state.loader = true 
+    })
+    .addCase(loginUser.rejected, (state, action) =>{
+      state.loader = false,
+      state.error = action.error.message 
+    })
+    .addCase(loginUser.fulfilled, (state, action) =>{
+      state.loader = false,
+      state.message = action.payload.message ,
+      state.user = action.payload.user ,
+      localStorage.setItem("loginUser", JSON.stringify(action.payload.user))
+    }) 
+    // logout user 
+    .addCase(logoutUser.pending, (state ) =>{
+      state.loader = true 
+    })
+    .addCase(logoutUser.rejected, (state, action) =>{
+      state.loader = false,
+      state.error = action.error.message 
+    })
+    .addCase(logoutUser.fulfilled, (state, action) =>{
+      state.loader = false,
+      state.message = action.payload.message ,
+      state.user = null,
+      localStorage.removeItem("loginUser") 
     }) 
   } 
 })

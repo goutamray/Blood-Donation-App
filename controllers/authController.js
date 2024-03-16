@@ -174,8 +174,8 @@ export const login = asyncHandler(async(req, res) => {
  
   // validation 
   if (!auth || !password ) {
-    return res.status(200).json({ message : "All fields are Required"});
-  }
+    return res.status(400).json({ message : "All fields are Required"});
+  };
 
 
   // check login user 
@@ -232,7 +232,7 @@ export const login = asyncHandler(async(req, res) => {
   }); 
 
 
-res.status(200).json({ user : loginUser, message : "User login Successfull", accessToken });
+res.status(200).json({ user : loginUser, message : "User login Successfull"});
 });
 
 

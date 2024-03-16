@@ -1,7 +1,53 @@
 
+import { useDispatch, useSelector } from "react-redux";
 import bloodLogo from "../../assets/frontend/img/blood.png"
+import { authSelect, setMessageEmpty } from "../../features/auth/authSlice";
+import useForm from "../../hooks/useForm";
+import { useEffect } from "react";
+import createToast from "../../utilis/toastify";
+import { loginUser } from "../../features/auth/authApiSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+
+  const dispatch = useDispatch(); 
+
+  const { error, message } = useSelector(authSelect);
+
+  // navigate dashboard
+   const navigate = useNavigate(); 
+  
+ const { input , handleInputChange, resetForm  } = useForm({
+   auth : "",
+   password : "",
+ });   
+
+// handle login user
+const handleLogin = (e) => {
+  e.preventDefault();
+
+  dispatch(loginUser(input))
+}; 
+
+
+
+
+  useEffect(() => {
+    if (message) {
+     createToast(message, "success"); 
+     dispatch(setMessageEmpty()); 
+     resetForm();
+     navigate("/dashboard"); 
+
+    } 
+
+    if (error) {
+     createToast(error); 
+     dispatch(setMessageEmpty());  
+    }
+  }, [error, message, dispatch, resetForm]); 
+
+
   return (
 
       <>
@@ -26,13 +72,13 @@ const Login = () => {
                           Login <span>Doccure</span>
                         </h3>
                       </div>
-                      <form action="index.html">
+                      <form onSubmit={handleLogin}>
                         <div className="mb-3 form-focus">
-                          <input type="email" className="form-control floating" />
+                          <input type="email" className="form-control floating" name="auth" value={input.auth} onChange={handleInputChange} />
                           <label className="focus-label">Email</label>
                         </div>
                         <div className="mb-3 form-focus">
-                          <input type="password" className="form-control floating" />
+                          <input type="text" className="form-control floating" name="password" value={input.password} onChange={handleInputChange} />
                           <label className="focus-label">Password</label>
                         </div>
                         <div className="text-end">
