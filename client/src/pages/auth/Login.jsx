@@ -6,7 +6,7 @@ import useForm from "../../hooks/useForm";
 import { useEffect } from "react";
 import createToast from "../../utilis/toastify";
 import { loginUser } from "../../features/auth/authApiSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
 
@@ -109,7 +109,7 @@ const handleLogin = (e) => {
                           </div>
                         </div>
                         <div className="text-center dont-have">
-                          Don’t have an account? <a href="register.html">Register</a>
+                          Dont have an account? <Link to="/register"> Register</Link>    
                         </div>
                       </form>
                     </div>

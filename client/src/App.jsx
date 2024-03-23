@@ -2,10 +2,26 @@
 import { RouterProvider } from 'react-router-dom'
 import  router  from "./route/router"  
 import { ToastContainer } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { getLoggedInUser } from './features/auth/authApiSlice';
+
 import './App.css'
 
-
 function App() { 
+
+  const dispatch = useDispatch(); 
+
+  useEffect(() => {
+
+   if (localStorage.getItem("loginUser")) {
+      dispatch(getLoggedInUser());
+   }
+
+  }, [dispatch]);
+
+
+
   return (
     <>
        <ToastContainer

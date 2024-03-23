@@ -13,7 +13,7 @@ router.post("/register", registerUser);
 router.post("/login", login);
 router.post("/account-activate-by-otp/:token", accountActivateByOTP);
 router.get("/me",verifyToken, getLoggedInUser);
-router.post("/logout", verifyToken, logout);
+router.post("/logout", logout);
 
 
 // export defult router 

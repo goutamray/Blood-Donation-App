@@ -1,6 +1,6 @@
 
 import bloodLogo from "../../assets/frontend/img/blood.png"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import useForm from "../../hooks/useForm";
 import { useDispatch, useSelector } from "react-redux"
 import { registerPatient } from "../../features/auth/authApiSlice";
@@ -12,6 +12,7 @@ const Register = () => {
    const { loader, error, message } = useSelector(authSelect);
 
    const dispatch = useDispatch(); 
+   const navigate = useNavigate(); 
    
   const { input , handleInputChange, resetForm  } = useForm({
     name : "",
@@ -32,7 +33,7 @@ const Register = () => {
       createToast(message, "success"); 
       dispatch(setMessageEmpty()); 
       resetForm();
-
+      navigate("/login");
      } 
 
      if (error) {

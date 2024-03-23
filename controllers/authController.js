@@ -94,7 +94,8 @@ export const registerUser = asyncHandler(async(req, res) => {
    }
  }
 
- res.status(201).json({ message : "User Created Successfull",  users : user });
+   // send response 
+   res.status(201).json({ message : "User Created Successfull",  users : user });
 });
 
 
@@ -156,7 +157,8 @@ export const accountActivateByOTP = asyncHandler(async(req, res) => {
  // clear cookie 
  res.clearCookie("activationToken"); 
 
- res.status(200).json({ message : "User Activation Successfull" });
+   // send response 
+   res.status(200).json({ message : "User Activation Successfull" });
 });
 
 
@@ -231,8 +233,8 @@ export const login = asyncHandler(async(req, res) => {
      maxAge : 1000 * 60 * 60 * 24 * 365,
   }); 
 
-
-res.status(200).json({ user : loginUser, message : "User login Successfull"});
+  // send response 
+  res.status(200).json({ user : loginUser, message : "User login Successfull"});
 });
 
 
@@ -252,7 +254,8 @@ export const getLoggedInUser = asyncHandler(async(req, res) => {
      return res.status(400).json({ message : "User loggedin data not found" });
   }
 
-res.status(200).json({auth : req.me ,  message : "User logged in Successfull" });
+  // send response 
+  res.status(200).json({auth : req.me ,  message : "User logged in Successfull" });
 });
 
 
@@ -268,7 +271,8 @@ export const logout = asyncHandler(async(req, res) => {
  // clear cookie 
  res.clearCookie("accessToken")
 
-res.status(200).json({ message : "User logout Successfull" });
+  // send response 
+  res.status(200).json({ message : "User logout Successfull" });
 });
 
 

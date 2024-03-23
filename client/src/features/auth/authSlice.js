@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, logoutUser, registerDonor, registerPatient } from "./authApiSlice";
+import { getLoggedInUser, loginUser, logoutUser, registerDonor, registerPatient } from "./authApiSlice";
 
 
 // create auth slice 
@@ -21,55 +21,71 @@ const authSlice = createSlice({
     builder
     // register patient 
     .addCase(registerPatient.pending, (state ) =>{
-      state.loader = true 
+      state.loader = true; 
     })
     .addCase(registerPatient.rejected, (state, action) =>{
-      state.loader = false,
-      state.error = action.error.message 
+      state.loader = false; 
+      state.error = action.error.message;  
     })
     .addCase(registerPatient.fulfilled, (state, action) =>{
-      state.loader = false,
-      state.message = action.payload.message 
+      state.loader = false; 
+      state.message = action.payload.message;  
     }) 
     // regiser doner 
     .addCase(registerDonor.pending, (state ) =>{
-      state.loader = true 
+      state.loader = true;  
     })
     .addCase(registerDonor.rejected, (state, action) =>{
-      state.loader = false,
-      state.error = action.error.message 
+      state.loader = false; 
+      state.error = action.error.message;  
     })
     .addCase(registerDonor.fulfilled, (state, action) =>{
-      state.loader = false,
-      state.message = action.payload.message 
+      state.loader = false; 
+      state.message = action.payload.message;  
     }) 
     // login user 
     .addCase(loginUser.pending, (state ) =>{
-      state.loader = true 
+      state.loader = true;  
     })
     .addCase(loginUser.rejected, (state, action) =>{
-      state.loader = false,
-      state.error = action.error.message 
+      state.loader = false; 
+      state.error = action.error.message;  
     })
     .addCase(loginUser.fulfilled, (state, action) =>{
-      state.loader = false,
-      state.message = action.payload.message ,
-      state.user = action.payload.user ,
-      localStorage.setItem("loginUser", JSON.stringify(action.payload.user))
+      state.loader = false; 
+      state.message = action.payload.message; 
+      state.user = action.payload.user; 
+      localStorage.setItem("loginUser", JSON.stringify(action.payload.user)); 
     }) 
     // logout user 
     .addCase(logoutUser.pending, (state ) =>{
-      state.loader = true 
+      state.loader = true; 
     })
     .addCase(logoutUser.rejected, (state, action) =>{
-      state.loader = false,
-      state.error = action.error.message 
+      state.loader = false;
+      state.error = action.error.message; 
     })
     .addCase(logoutUser.fulfilled, (state, action) =>{
-      state.loader = false,
-      state.message = action.payload.message ,
-      state.user = null,
-      localStorage.removeItem("loginUser") 
+      state.loader = false;
+      state.message = action.payload.message;
+      state.user = null;
+      localStorage.removeItem("loginUser"); 
+    }) 
+    // check user login or not
+    .addCase(getLoggedInUser.pending, (state ) =>{
+      state.loader = true; 
+    })
+    .addCase(getLoggedInUser.rejected, (state, action) =>{
+      state.loader = false;
+      state.error = action.error.message;
+      state.user = null;
+      localStorage.removeItem("loginUser");
+    })
+    .addCase(getLoggedInUser.fulfilled, (state, action) =>{
+      state.loader = false;
+      state.user = action.payload.auth;
+      localStorage.setItem("loginUser", JSON.stringify(action.payload.auth ));
+ 
     }) 
   } 
 })

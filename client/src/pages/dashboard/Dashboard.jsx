@@ -5,12 +5,17 @@ import pt03 from "../../assets/frontend/img/specialities/pt-dashboard-03.png"
 import pt04 from "../../assets/frontend/img/specialities/pt-dashboard-04.png"
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../features/auth/authApiSlice";
+import useAuth from "../../hooks/useAuth";
 
 
 
 
 const Dashboard = () => {
    const dispatch = useDispatch(); 
+
+   const { auth } = useAuth();
+
+ 
 
   // logout user 
   const handleUserLogout = (e) => {
@@ -32,17 +37,29 @@ const Dashboard = () => {
                     <div className="widget-profile pro-widget-content">
                       <div className="profile-info-widget">
                         <a href="#" className="booking-doc-img">
-                          <Avatar url= ""/>
+                          <Avatar url={auth.photo && auth.photo }/>
                         </a>
                         <div className="profile-det-info">
-                          <h3>Richard Wilson</h3>
+                          <h3> { auth.name } </h3>
                           <div className="patient-details">
-                            <h5>
-                              <i className="fas fa-birthday-cake" /> 24 Jul 1983, 38
-                              years
+                            {
+                              auth.dateOfBirth && <>
+                                <h5>
+                                 <i className="fas fa-birthday-cake" /> 
+                                 { auth.dateOfBirth}
                             </h5>
+                              </>
+                            }
+                          
                             <h5 className="mb-0">
-                              <i className="fas fa-map-marker-alt" /> Newyork, USA
+                              {
+                                auth.location && 
+                                <>
+                                  <i className="fas fa-map-marker-alt" />
+                                  {auth.location}
+                                 </>  
+                              }
+                            
                             </h5>
                           </div>
                         </div>
@@ -84,7 +101,7 @@ const Dashboard = () => {
                             </a>
                           </li>
                           <li>
-                            <a to="/login" onClick={handleUserLogout}>
+                            <a href="#" onClick={handleUserLogout}>
                               <i className="fas fa-sign-out-alt" />
                               <span>Logout</span>
                             </a>            
